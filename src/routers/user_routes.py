@@ -28,7 +28,7 @@ async def handle_user_get(email: str, password: str, db: Session=Depends(get_db)
     
 @router.post('')
 async def handle_user_post(user: UserJson, db: Session=Depends(get_db)):
-    new_user = UserTable(**user.dict())
+    new_user = UserTable(**user.model_dump())
     
     db.add(new_user)
     
@@ -38,7 +38,10 @@ async def handle_user_post(user: UserJson, db: Session=Depends(get_db)):
         
         return {'data': new_user}
     except Exception as e:
-        return {'response': False}
+        raise HTTPException(
+            status_code=409,
+            detail='user with that email already exists'
+        )
     
     
 @router.put('')
