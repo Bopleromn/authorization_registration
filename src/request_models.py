@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
 
 
-class UserAdd(BaseModel):
-    email: str = Field(max_length=20)
-    password: str = Field(max_length=10)
+class UserBase(BaseModel):
+    email: str 
+    password: str 
     name: str
-    age: int = Field(ge=0)
+    age: int 
 
 
-class User(UserAdd):
+class User(UserBase):
     id: int

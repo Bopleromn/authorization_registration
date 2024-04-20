@@ -1,13 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+import config
 
 
-password: str = '7403439Mb'
-db_name: str = 'SPARKS'
-
-SQLALCHEMY_DATABASE_URL = f'postgresql://postgres:{password}@localhost/{db_name}'
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(config.DB_URL)
 SessionLocal = sessionmaker(autoflush=False, bind=engine)
 Base = declarative_base()
 
