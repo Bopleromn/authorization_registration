@@ -81,11 +81,11 @@ async def handle_user_delete(email: str, password: str, db: Session=Depends(get_
     
 @router.get('/verification_codes/send')
 async def handle_verification_code_send(email: str, db: Session = Depends(get_db)):
-    if db.query(UserTable).filter(UserTable.email).first() is None:
-        raise HTTPException(
-            status_code=404,
-            detail='no such user'
-        )
+    # if db.query(UserTable).filter(UserTable.email).first() is None:
+    #     raise HTTPException(
+    #         status_code=404,
+    #         detail='no such user'
+    #     )
     
     current_code: int = randint(100000, 999999)
     
@@ -94,7 +94,13 @@ async def handle_verification_code_send(email: str, db: Session = Depends(get_db
         email=email
     )
     
-    await send_email(email, f"Здравствуйте, {email}. Ваш код подтверждения пришел", f"Код: {current_code}")
+    try:
+        await send_email(email, f"Здравствуйте, {email}. Ваш код подтверждения пришел", f"Код: {current_code}")
+    except:
+        raise HTTPException(
+            status_code=400,
+            detail='invalid email address'
+        )
 
     query = db.query(VerificationCodesTable).filter(
         VerificationCodesTable.email == email
