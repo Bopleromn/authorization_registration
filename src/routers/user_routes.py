@@ -81,7 +81,7 @@ async def handle_user_delete(email: str, password: str, db: Session=Depends(get_
     
 @router.get('/verification_codes/send')
 async def handle_verification_code_send(email: str, is_registration: bool, db: Session = Depends(get_db)):
-    if (not is_registration) and db.query(UserTable).filter(UserTable.email).first() is None:
+    if (not is_registration) and (db.query(UserTable).filter(UserTable.email).first() is None):
         raise HTTPException(
             status_code=404,
             detail='no such user'
